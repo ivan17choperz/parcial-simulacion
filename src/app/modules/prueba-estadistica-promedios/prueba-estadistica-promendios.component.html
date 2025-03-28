@@ -1,0 +1,90 @@
+<div class="container w-full h-screen flex items-center">
+  <div class="grid grid-cols-3 gap-10">
+    <div>
+      <div class="card">
+        <label for="">Selecciona la tabla a evaluar</label>
+        <input
+          class="hidden"
+          class="hidden"
+          type="file"
+          accept=".csv"
+          (change)="onUpload($event)"
+          [multiple]="true"
+          #file
+        />
+        <p-button (click)="file.click()">Cargar</p-button>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="" class="font-semibold">Agrega tus Datos:</label>
+        <input
+          type="number"
+          [(ngModel)]="numberInput"
+          class="px-2 py-3 border rounded"
+        />
+        <p-button (onClick)="addDataIntoList()">Agregar</p-button>
+      </div>
+      <br />
+      <div class="flex flex-col gap-1.5">
+        <label for="" class="font-semibold">Select the significance:</label>
+        <p-select
+          [options]="significanceLevel"
+          [(ngModel)]="significanceLevelInput"
+        />
+      </div>
+
+      <br />
+      <div class="flex flex-col gap-5">
+        <p class="font-bold">Datos seleccionados:</p>
+        <div class="grid grid-cols-4 border">
+          @for (data of listData; track $index) {
+          <div class="p-3 font-semibold">
+            {{ data }}
+          </div>
+          }
+        </div>
+      </div>
+      <br />
+      <p-button class="w-full" (onClick)="onSubmit()">Realizar prueba</p-button>
+      <br />
+      <br />
+      <div class="flex flex-col">
+        <p class="text-lg">Resultados:</p>
+      </div>
+    </div>
+
+    <div class="col-span-2">
+      <p class="text-3xl font-bold">Tabla de datos</p>
+      <br />
+      <p-scrollPanel [style]="{ width: '100%', height: '400px' }">
+        <table class="table-fixed">
+          <thead>
+            <tr>
+              @for (head of rowHeader; track $index) {
+              <th class="p-3 bg-green-700 text-white font-bold">
+                {{ head }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rowsContent; track $index) {
+            <tr>
+              @for (col of row; track $index) {
+              <td
+                class="p-3"
+                [ngClass]="{
+                  'bg-green-700 text-white font-bold': $index === 0
+                }"
+              >
+                {{ col }}
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </p-scrollPanel>
+    </div>
+  </div>
+</div>
