@@ -55,7 +55,7 @@ export class PruebaEstadisticaFrecuenciasComponent implements OnInit {
 
   numberInput = 0;
   significanceLevelInput = 0;
-
+  kValue = 0;
   resultTest = this.#calculatesService.readTestResult;
 
   ngOnInit(): void {}
@@ -84,9 +84,10 @@ export class PruebaEstadisticaFrecuenciasComponent implements OnInit {
     if (this.significanceLevelInput === 0) return;
 
     this.#calculatesService.setInitialData({
-      testType: 'average',
+      testType: 'frequencies',
       significanceLevel: this.significanceLevelInput,
       listData: this.listData,
+      k: this.kValue,
     });
   }
 
@@ -95,6 +96,7 @@ export class PruebaEstadisticaFrecuenciasComponent implements OnInit {
     this.listData = [];
     this.significanceLevelInput = 0;
     this.numberInput = 0;
+    this.kValue = 0;
     this.#calculatesService.resetValues();
   }
 }

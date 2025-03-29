@@ -19,7 +19,7 @@
         <p-button (click)="file.click()">Cargar</p-button>
       </div>
 
-      <div class="flex flex-col gap-1.5">
+      <div class="flex flex-col gap-1.5 mt-5">
         <label for="" class="font-semibold">Agrega tus Datos:</label>
         <input
           type="number"
@@ -28,9 +28,17 @@
         />
         <p-button (onClick)="addDataIntoList()">Agregar</p-button>
       </div>
+      <div class="flex flex-col gap-1.5 mt-5">
+        <label for="" class="font-semibold">Agregar constante (K):</label>
+        <input
+          type="number"
+          [(ngModel)]="kValue"
+          class="px-2 py-3 border rounded"
+        />
+      </div>
       <br />
       <div class="flex flex-col gap-1.5">
-        <label for="" class="font-semibold">Select the significance:</label>
+        <label for="" class="font-semibold">Selecciona la significancia:</label>
         <p-select
           [options]="significanceLevel"
           [(ngModel)]="significanceLevelInput"
