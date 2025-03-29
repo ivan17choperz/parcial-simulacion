@@ -1,0 +1,119 @@
+<div class="container w-full h-screen flex flex-col items-center">
+  <h1 class="text-5xl font-bold py-10">Frecuencias</h1>
+
+  <div class="grid grid-cols-3 gap-10">
+    <div>
+      <div class="card">
+        <label for="" class="font-semibold">
+          Selecciona la tabla a evaluar
+        </label>
+        <input
+          class="hidden"
+          type="file"
+          accept=".csv"
+          (change)="onUpload($event)"
+          [multiple]="true"
+          #file
+        />
+        <br />
+        <p-button (click)="file.click()">Cargar</p-button>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="" class="font-semibold">Agrega tus Datos:</label>
+        <input
+          type="number"
+          [(ngModel)]="numberInput"
+          class="px-2 py-3 border rounded"
+        />
+        <p-button (onClick)="addDataIntoList()">Agregar</p-button>
+      </div>
+      <br />
+      <div class="flex flex-col gap-1.5">
+        <label for="" class="font-semibold">Select the significance:</label>
+        <p-select
+          [options]="significanceLevel"
+          [(ngModel)]="significanceLevelInput"
+        />
+      </div>
+
+      <br />
+      <div class="flex flex-col gap-5">
+        <p class="font-bold">Datos seleccionados:</p>
+        <div class="grid grid-cols-4 border">
+          @for (data of listData; track $index) {
+          <div class="p-3 font-semibold">
+            {{ data }}
+          </div>
+          }
+        </div>
+      </div>
+      <br />
+      <p-button class="w-full" (onClick)="onSubmit()">Realizar prueba</p-button>
+      <br />
+      <br />
+      <div class="flex flex-col">
+        <p class="text-lg">Resultados:</p>
+
+        <div class="flex flex-col">
+          <div *ngIf="resultTest() as test" class="mt-4 p-4 border rounded">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="font-semibold">Estadístico de prueba:</p>
+                <p>{{ test.testStatistic }}</p>
+              </div>
+
+              <div>
+                <p class="font-semibold">Valor crítico:</p>
+                <p>{{ test.criticalValue }}</p>
+              </div>
+
+              <div class="col-span-2">
+                <p class="font-semibold">Conclusión:</p>
+                <p [class]="test.isUniform ? 'text-green-600' : 'text-red-600'">
+                  {{ test.conclusion }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-2">
+      <p class="text-3xl font-bold">Tabla de datos</p>
+      <br />
+      <p-scrollPanel [style]="{ width: '100%', height: '400px' }">
+        <table class="table-fixed">
+          <thead>
+            <tr>
+              @for (head of rowHeader; track $index) {
+              <th class="p-3 bg-green-700 text-white font-bold">
+                {{ head }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rowsContent; track $index) {
+            <tr>
+              @for (col of row; track $index) {
+              <td
+                class="p-3"
+                [ngClass]="{
+                  'bg-green-700 text-white font-bold': $index === 0
+                }"
+              >
+                {{ col }}
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </p-scrollPanel>
+      <br />
+      <p-button label="Resetear Valores" (onClick)="reset()" />
+    </div>
+  </div>
+</div>

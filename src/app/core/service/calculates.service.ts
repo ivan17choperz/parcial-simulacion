@@ -1,10 +1,10 @@
 // calculates.service.ts
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import {
-  TestResult,
   TestType,
   SignificanceLevel,
   CriticalValueTable,
+  TestResult,
 } from '../interfaces/generalModel.interface';
 import { CriticalTables } from '../interfaces/generalModel.interface';
 import { ExcelService } from './excel.service';
@@ -20,15 +20,12 @@ export class CalculatesService {
   significanceLevel = signal<SignificanceLevel>(0.05);
   kValue = signal<number>(0);
 
-  // Results
-  testResult = signal<TestResult | null>(null);
+  resultTest = signal<TestResult | null>(null);
+  readTestResult = computed(() => this.resultTest());
 
-  // Critical values table
-  private tables: CriticalTables = {
-    chiSquare: {},
-    standardNormal: {},
-  };
-
+  public get getResultTest(): TestResult {
+    return this.readTestResult() as TestResult;
+  }
   public setInitialData(data: any) {
     this.testType.set(data.testType);
     this.significanceLevel.set(data.significanceLevel);
@@ -65,9 +62,21 @@ export class CalculatesService {
       this.calculateSignificanceLevel()
     );
 
-    console.log(data, z, this.calculateSignificanceLevel());
+    console.log(data[0], z, this.calculateSignificanceLevel());
 
-    return z;
+    const isUniform = z <= data[0];
+    const conclusion = isUniform
+      ? 'Se acepta H₀: rᵢ ~ U(0,1) y se rechaza H₁: rᵢ no son uniformes'
+      : 'Se rechaza H₀: rᵢ ~ U(0,1) y se acepta H₁: rᵢ no son uniformes';
+
+    const response: TestResult = {
+      testStatistic: z,
+      criticalValue: data[0],
+      conclusion,
+      isUniform,
+    };
+
+    this.resultTest.set(response);
   }
 
   public runningFrequencyTest() {
@@ -86,5 +95,14 @@ export class CalculatesService {
 
   public calculateSignificanceLevel() {
     return this.significanceLevel() / 2;
+  }
+
+  public resetValues() {
+    this.testType.set(null);
+    this.dataCount.set(null);
+    this.listData.set([]);
+    this.significanceLevel.set(0.05);
+    this.kValue.set(0);
+    this.resultTest.set(null);
   }
 }

@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { CalculatesService } from '../../core/service/calculates.service';
 import { ExcelService } from '../../core/service/excel.service';
@@ -13,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
+import { TestResult } from '../../core/interfaces/generalModel.interface';
 
 @Component({
   selector: 'app-prueba-estadistica-promedios',
@@ -56,6 +58,8 @@ export class PruebaEstadisticaPromediosComponent implements OnInit {
   numberInput = 0;
   significanceLevelInput = 0;
 
+  resultTest = this.#calculatesService.readTestResult;
+
   ngOnInit(): void {}
 
   async onUpload(event: Event) {
@@ -64,13 +68,10 @@ export class PruebaEstadisticaPromediosComponent implements OnInit {
     if (!file) return;
 
     const data = await this.#excelService.cargarDatosDesdeCSV(file);
-    console.log(this.#excelService.datosNumericos);
     if (!data) return;
 
     this.rowHeader = data[0];
     this.rowsContent = data.slice(1);
-
-    console.log(this.rowsContent);
   }
 
   addDataIntoList() {
@@ -89,5 +90,13 @@ export class PruebaEstadisticaPromediosComponent implements OnInit {
       significanceLevel: this.significanceLevelInput,
       listData: this.listData,
     });
+  }
+
+  reset() {
+    this.#excelService.reset();
+    this.listData = [];
+    this.significanceLevelInput = 0;
+    this.numberInput = 0;
+    this.#calculatesService.resetValues();
   }
 }

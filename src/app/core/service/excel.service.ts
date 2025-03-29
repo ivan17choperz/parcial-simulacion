@@ -144,4 +144,8 @@ export class ExcelService {
   get datosNumericos(): number[][] {
     return this.numericData;
   }
+
+  reset() {
+    this.numericData = [];
+  }
 }

@@ -2,10 +2,8 @@
 export interface TestResult {
   testStatistic: number;
   criticalValue: number;
-  degreesOfFreedom?: number;
-  decision: string;
   conclusion: string;
-  pValue?: number;
+  isUniform: boolean;
 }
 
 // test-config.model.ts

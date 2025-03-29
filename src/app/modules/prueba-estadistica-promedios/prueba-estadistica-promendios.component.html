@@ -1,10 +1,13 @@
-<div class="container w-full h-screen flex items-center">
+<div class="container w-full h-screen flex flex-col items-center">
+  <h1 class="text-5xl font-bold py-10">Promedios</h1>
+
   <div class="grid grid-cols-3 gap-10">
     <div>
       <div class="card">
-        <label for="">Selecciona la tabla a evaluar</label>
+        <label for="" class="font-semibold">
+          Selecciona la tabla a evaluar
+        </label>
         <input
-          class="hidden"
           class="hidden"
           type="file"
           accept=".csv"
@@ -12,6 +15,7 @@
           [multiple]="true"
           #file
         />
+        <br />
         <p-button (click)="file.click()">Cargar</p-button>
       </div>
 
@@ -50,6 +54,29 @@
       <br />
       <div class="flex flex-col">
         <p class="text-lg">Resultados:</p>
+
+        <div class="flex flex-col">
+          <div *ngIf="resultTest() as test" class="mt-4 p-4 border rounded">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="font-semibold">Estadístico de prueba:</p>
+                <p>{{ test.testStatistic }}</p>
+              </div>
+
+              <div>
+                <p class="font-semibold">Valor crítico:</p>
+                <p>{{ test.criticalValue }}</p>
+              </div>
+
+              <div class="col-span-2">
+                <p class="font-semibold">Conclusión:</p>
+                <p [class]="test.isUniform ? 'text-green-600' : 'text-red-600'">
+                  {{ test.conclusion }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -85,6 +112,8 @@
           </tbody>
         </table>
       </p-scrollPanel>
+      <br />
+      <p-button label="Resetear Valores" (onClick)="reset()" />
     </div>
   </div>
 </div>
